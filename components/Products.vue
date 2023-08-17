@@ -1,10 +1,11 @@
 <template>
   <section>
     <div class="mt-3">
+     <!-- Title  -->
       <span class="text-secendory text-4xl ml-6"> Products</span>
     </div>
     <div class="grid grid-cols-3 mt-5 gap-4">
-      <!--  Filter of Products -->
+      <!--  Filters of Products -->
       <div class="flex">
         <div class="ml-2">
           <input
@@ -18,6 +19,7 @@
           />
         </div>
       </div>
+      
       <div class="justify-center flex">
         <div class="">
           <select
@@ -28,18 +30,23 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5"
           >
             <option value="">Select category</option>
-             <option v-for="categorydata in categoryList"
-                  :key="categorydata.id" :value="categorydata.id">{{categorydata.name}}</option>
+            <option
+              v-for="categorydata in categoryList"
+              :key="categorydata.id"
+              :value="categorydata.id"
+            >
+              {{ categorydata.name }}
+            </option>
           </select>
         </div>
       </div>
-      <!-- Title  -->
+     
 
       <!-- create user button  -->
       <div class="grid-cols-end flex justify-end">
         <button
           class="inline-flex items-center glow-on-hover px-5 py-2.5 mr-3 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800 mb-6"
-          @click="dialog = true,dialogKey='Create'"
+          @click="(dialog = true), (dialogKey = 'Create')"
         >
           Create Product
         </button>
@@ -54,7 +61,7 @@
             >
               Id
             </th>
-        
+
             <th
               class="px-6 py-3 bg-gray-100 text-left leading-4 text-lg font-black text-gray-600 uppercase tracking-wider"
             >
@@ -71,7 +78,6 @@
               description
             </th>
 
-         
             <th
               class="px-6 py-3 bg-gray-100 text-left leading-4 text-lg font-black text-gray-600 uppercase tracking-wider"
             >
@@ -85,9 +91,9 @@
         <tbody>
           <tr class="bg-white" v-for="data in productData" :key="data.id">
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-             {{data.id}}
+              {{ data.id }}
             </td>
-           
+
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
               {{ data.title }}
             </td>
@@ -97,7 +103,7 @@
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
               {{ data.description }}
             </td>
-            
+
             <td class="px-10 py-4 whitespace-no-wrap border-b border-gray-200">
               <div class="flex">
                 <nuxt-icon
@@ -120,16 +126,30 @@
           </tr>
         </tbody>
       </table>
-      <div v-if="!productData.length">
-      <h2 class=" text-center text-2xl mt-5">
-        Data Not Available</h2>
+      <!-- Pagination  -->
+      <div class="center mt-3 text-right">
+        <div class="pagination">
+          <a href="#">&laquo;</a>
+          <a href="#" class="active">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+          <a href="#">6</a>
+          <a href="#">&raquo;</a>
+        </div>
       </div>
- 
+      <div v-if="!productData.length">
+        <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
+      </div>
     </div>
+    <!-- Modal for edit and create Product  -->
     <v-dialog v-model="dialog" persistent width="1024">
       <v-card>
         <v-card-title class="text-center mt-3">
-          <span class="text-h3">{{dialogKey == "Create" ? "Create Product" : "Update Product"}}</span>
+          <span class="text-h3">{{
+            dialogKey == "Create" ? "Create Product" : "Update Product"
+          }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -173,34 +193,34 @@
                   {{ errors.price }}
                 </span>
               </v-col>
-              <v-col cols="12" sm="12" md="12" >
-              <div  >
+              <v-col cols="12" sm="12" md="12">
+                <div>
+                  <label
+                    for="category"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Category</label
+                  >
+                  <select
+                    id="category"
+                    v-model="category"
+                    @keyup="validateInput('category', category)"
+                    @blur="validateInput('category', category)"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+                  >
+                    <option value="">Select category</option>
+                    <option
+                      v-for="categorydata in categoryList"
+                      :key="categorydata.id"
+                      :value="categorydata.id"
+                    >
+                      {{ categorydata.name }}
+                    </option>
+                  </select>
 
-                   <label
-                  for="category"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >Category</label
-                >
-                <select
-                  id="category"
-                
-                  v-model="category"
-                 
-                  @keyup="validateInput('category', category)"
-                  @blur="validateInput('category', category)"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-                >
-                  <option value="">Select category</option>
-                  <option v-for="categorydata in categoryList"
-                  :key="categorydata.id" :value="categorydata.id">{{categorydata.name}}</option>
-                
-                </select>
-               
-                <span class="text-red-600" v-if="errors.category">
-                  {{ errors.category }}
-                </span>
-              </div>
-               
+                  <span class="text-red-600" v-if="errors.category">
+                    {{ errors.category }}
+                  </span>
+                </div>
               </v-col>
               <v-col cols="12" sm="12" md="12">
                 <label
@@ -225,7 +245,7 @@
           <button
             class="inline-flex items-center px-5 py-2.5 mr-3 text-sm font-medium text-center text-white bg-secondary rounded-lg mb-6"
             variant="text"
-            @click="(dialog = false), resetValidation(),emptyfield()"
+            @click="(dialog = false), resetValidation(), emptyfield()"
           >
             Close
           </button>
@@ -234,7 +254,7 @@
             class="inline-flex items-center px-5 py-2.5 mr-3 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800 mb-6"
             @click="createProduct(data)"
           >
-           {{dialogKey=="Create" ? "Create" : "Update"}}
+            {{ dialogKey == "Create" ? "Create" : "Update" }}
           </button>
         </v-card-actions>
       </v-card>
@@ -251,7 +271,7 @@ import { useToast } from "vue-toastification";
 
 // variables
 const productData = ref([]);
-const categoryList = ref([])
+const categoryList = ref([]);
 const categoryFilter = ref("");
 const route = useRouter();
 const searchProduct = ref("");
@@ -263,27 +283,24 @@ const description = ref("");
 const price = ref(null);
 const success = ref(false);
 const error = ref(false);
-const dialogKey = ref()
+const dialogKey = ref();
 const { validateNameField, errors, validatePriceField } = useFormValidation();
 const runtimeConfig = useRuntimeConfig();
-const id = ref()
+const id = ref();
 const apiBaseUrl = runtimeConfig.public.API_BASE_URL;
 // Mounted
 onMounted(async () => {
-      await getCategoryList()
+  await getCategoryList();
   await getProductData();
-
 });
-
-watch(searchProduct,async(nv)=>{
-    if(nv){
-        await getProductData()
-    }else{
-        await getProductData()
-    }
-
-})
-
+// Search Product Watcher
+watch(searchProduct, async (nv) => {
+  if (nv) {
+    await getProductData();
+  } else {
+    await getProductData();
+  }
+});
 
 // Methods
 
@@ -291,31 +308,29 @@ watch(searchProduct,async(nv)=>{
 const filterCategory = async () => {
   console.log("hello", categoryFilter.value);
   if (categoryFilter.value) {
-  let data = await axios.post(`${apiBaseUrl}/api/product/list`,{
-    search:searchProduct.value,
-    category_id : categoryFilter.value
-   
-  });
-  let product = data.data.data;
-  productData.value = product.products
+    let data = await axios.post(`${apiBaseUrl}/api/product/list`, {
+      search: searchProduct.value,
+      category_id: categoryFilter.value,
+    });
+    let product = data.data.data;
+    productData.value = product.products;
   } else {
     await getProductData();
   }
 };
 //get list of Product
 const getProductData = async () => {
-  let data = await axios.post(`${apiBaseUrl}/api/product/list`,{
-    search:searchProduct.value,
-   
+  let data = await axios.post(`${apiBaseUrl}/api/product/list`, {
+    search: searchProduct.value,
   });
   let product = data.data.data;
-  productData.value = product.products
-  console.log(' productData.value: ',  productData.value);
+  productData.value = product.products;
+  console.log(" productData.value: ", productData.value);
 };
 
 //delete Product
-function deleteProduct(id){
- Swal.fire({
+function deleteProduct(id) {
+  Swal.fire({
     title: "Are you sure?",
     text: "You won't be able to revert this!",
     icon: "warning",
@@ -324,34 +339,32 @@ function deleteProduct(id){
     confirmButtonColor: "#1E4ED8",
 
     confirmButtonText: "Yes, delete it!",
-  }).then(async(result) => {
-   try{
-     if (result.isConfirmed) {
-     
-      let data = await axios.post(`${apiBaseUrl}/api/product/delete`,{
-      id:id
-      })
- 
-   await getProductData()
-     
-      Swal.fire({
-        title: "Deleted!",
-        text: data.data.message,
-        icon: "success",
-        confirmButtonColor: "#1E4ED8"
-        
-      });
-    }
-   }catch(e){
-    console.log('e: ', e);
-      toast.error(e.response.data.message)
-   }
-  }).catch((e)=>{
-    console.log('e: ', e);
-    
   })
-}
+    .then(async (result) => {
+      try {
+        if (result.isConfirmed) {
+          let data = await axios.post(`${apiBaseUrl}/api/product/delete`, {
+            id: id,
+          });
 
+          await getProductData();
+
+          Swal.fire({
+            title: "Deleted!",
+            text: data.data.message,
+            icon: "success",
+            confirmButtonColor: "#1E4ED8",
+          });
+        }
+      } catch (e) {
+        console.log("e: ", e);
+        toast.error(e.response.data.message);
+      }
+    })
+    .catch((e) => {
+      console.log("e: ", e);
+    });
+}
 
 // Input Validation method
 const validateInput = (fieldname: any, value) => {
@@ -376,37 +389,38 @@ const createProduct = async () => {
     category_id: category.value,
   };
 
-  if (dialogKey.value ==  "Create") {
+  if (dialogKey.value == "Create") {
     try {
-      let data = await axios.post(`${apiBaseUrl}/api/product/create`, 
-        payload,
-      );
-dialog.value=false
+      let data = await axios.post(`${apiBaseUrl}/api/product/create`, payload);
+      dialog.value = false;
       resetValidation();
       toast.success(data.data.message);
-emptyfield()
-      await getProductData()
+      emptyfield();
+      await getProductData();
     } catch (e) {
       toast.error("errrorr", e);
       error.value = true;
     }
   } else {
     try {
-        let payloadData = {
-    title: productTitle.value,
-    price: price.value,
-    description: description.value,
-    category_id: category.value,
-    id:id.value
-  };
-      let data = await axios.post(`${apiBaseUrl}/api/product/update`, payloadData);
+      let payloadData = {
+        title: productTitle.value,
+        price: price.value,
+        description: description.value,
+        category_id: category.value,
+        id: id.value,
+      };
+      let data = await axios.post(
+        `${apiBaseUrl}/api/product/update`,
+        payloadData
+      );
       resetValidation();
       console.log(data);
-     
-      dialog.value=false
-       emptyfield()
+
+      dialog.value = false;
+      emptyfield();
       toast.success(data.data.message);
-         await getProductData()
+      await getProductData();
     } catch (e) {
       //
       toast.error("errrorr", e);
@@ -428,34 +442,32 @@ const resetValidation = () => {
   errors.category = "";
 };
 
-const getCategoryList = async() => {
-let data =await axios.post(`${apiBaseUrl}/api/category/list`,{
-    
-})
-let categoryData = data.data.data
-console.log('categoryData: ', categoryData);
-categoryList.value = categoryData.categories
-console.log('categoryList.value: ', categoryList.value);
-
+// Get Categorylist
+const getCategoryList = async () => {
+  let data = await axios.post(`${apiBaseUrl}/api/category/list`, {});
+  let categoryData = data.data.data;
+  console.log("categoryData: ", categoryData);
+  categoryList.value = categoryData.categories;
+  console.log("categoryList.value: ", categoryList.value);
 };
 
-function editProduct(data){
-    console.log('data: ', data);
-    dialog.value = true,dialogKey.value='Edit',(id.value=data.id)
-    productTitle.value = data.title
-    price.value = data.price
-    category.value = data.category_id
-    description.value = data.description
-    id.value = data.id
 
+// Edit Product 
+function editProduct(data) {
+  console.log("data: ", data);
+  (dialog.value = true), (dialogKey.value = "Edit"), (id.value = data.id);
+  productTitle.value = data.title;
+  price.value = data.price;
+  category.value = data.category_id;
+  description.value = data.description;
+  id.value = data.id;
 }
 
-function emptyfield(){
-    productTitle.value = " ",
-
-    category.value = ""
-    description.value = ""
-    price.value = null
+// EmptyFiled
+function emptyfield() {
+  (productTitle.value = " "), (category.value = "");
+  description.value = "";
+  price.value = null;
 }
 </script>
 

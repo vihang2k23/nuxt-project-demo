@@ -1,50 +1,36 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark pl-3">
-  <div class="container-fluid  ">
-   <div class="flex justify-between w-full align-items-center">
- <div>
- 
-    <a class="navbar-brand font-bold cursor-pointer"  @click="emit('emitValue', 'Category')">E-commerce</a>
-      <!-- <v-btn
-            color="white font-bold  navbar-brand"
-            variant="plain"
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark pl-3">
+    <div class="container-fluid">
+      <div class="flex justify-between w-full align-items-center">
+        <div>
+          <a
+            class="navbar-brand font-bold cursor-pointer"
             @click="emit('emitValue', 'Category')"
+            >E-commerce</a
           >
-            E-commerce
-          </v-btn>  -->
-    </div>
- <div>
-  <v-btn
+        
+        </div>
+        <div>
+          <v-btn
             color="white navbar-brand"
             variant="plain"
             @click="emit('emitValue', 'Category')"
           >
             Category
-          </v-btn> 
-           <v-btn
+          </v-btn>
+          <v-btn
             color="white navbar-brand"
             variant="plain"
-          @click="emit('emitValue', 'Product')"
+            @click="emit('emitValue', 'Product')"
           >
             Product
-          </v-btn> 
-          <!-- <v-btn
-            color=" light-blue-accent-2 navbar-brand"
-            variant="plain"
-            
-          >
-            Product
-          </v-btn> -->
-   
-  </div>
-   </div>
-  
+          </v-btn>
+         
+        </div>
+      </div>
     </div>
- 
-</nav>
+  </nav>
 </template>
 <script setup>
-
-
-const emit = defineEmits(['emitValue']);
+const emit = defineEmits(["emitValue"]);
 </script>

@@ -1,9 +1,11 @@
 <template>
   <section>
     <div class="mt-3">
+       <!-- Title  -->
       <span class="text-secendory text-4xl ml-3"> Categories</span>
     </div>
-    <div class="flex justify-between mb-4 mt-4 align-items-center">
+    <!-- Filter of category  -->
+    <div class="flex justify-between mb-5 mt-4 align-items-center">
       <div>
         <input
           type="text"
@@ -11,20 +13,17 @@
           style="width: 300px"
           name="name"
           id="name"
-
           class="icon bg-gray-50 ml-4 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
           placeholder="Search Category"
         />
       </div>
-      <!-- Title  -->
+   
 
       <!-- create user button  -->
       <div class="grid-cols-end flex justify-end">
         <button
-          @click="dialog = true,dialogStatus='Create'"
+          @click="(dialog = true), (dialogStatus = 'Create')"
           class="inline-flex items-center glow-on-hover px-5 py-2.5 mr-4 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
-        
-     
         >
           Create Category
         </button>
@@ -53,12 +52,20 @@
         <tbody>
           <tr class="bg-white" v-for="data in categoryList" :key="data.id">
             <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                {{data.name}}
+              {{ data.name }}
             </td>
 
-            <td class="px-10 py-4 whitespace-no-wrap border-b border-gray-200  text-right">
+            <td
+              class="px-10 py-4 whitespace-no-wrap border-b border-gray-200 text-right"
+            >
               <div class="flex justify-end">
-                <nuxt-icon name="delete" style="" class="ml- 2 mr-3" filled @click="deleteCategory(data.id)">
+                <nuxt-icon
+                  name="delete"
+                  style=""
+                  class="ml- 2 mr-3"
+                  filled
+                  @click="deleteCategory(data.id)"
+                >
                 </nuxt-icon>
                 <nuxt-icon
                   class="cursor-pointer"
@@ -72,17 +79,33 @@
           </tr>
         </tbody>
       </table>
+      <!-- Pagination design -->
+      <div class="center mt-3">
+        <div class="pagination">
+          <a href="#">&laquo;</a>
+          <a href="#" class="active">1</a>
+          <a href="#">2</a>
+          <a href="#">3</a>
+          <a href="#">4</a>
+          <a href="#">5</a>
+          <a href="#">6</a>
+          <a href="#">&raquo;</a>
+        </div>
+      </div>
       <div v-if="!categoryList.length">
-      <h2 class="text-center text-2xl mt-5">
-        Data Not Available</h2>
+        <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
       </div>
     </div>
   </section>
 
+
+<!-- Modal for edit and create category  -->
   <v-dialog v-model="dialog" persistent width="512">
     <v-card>
       <v-card-title class="text-center mt-3">
-        <span class="text-h5  text-center">{{dialogStatus == "Create" ? "Create Category" : "Update Category"}}</span>
+        <span class="text-h5 text-center">{{
+          dialogStatus == "Create" ? "Create Category" : "Update Category"
+        }}</span>
       </v-card-title>
       <v-card-text>
         <v-container>
@@ -113,7 +136,9 @@
         <v-spacer></v-spacer>
         <v-btn
           class="inline-flex items-center px-5 py-2.5 mr-3 text-sm font-medium text-center text-white bg-secondary rounded-lg mb-6"
-          @click="(dialog = false), (errors.categoryname = ''), (categoryName = '')"
+          @click="
+            (dialog = false), (errors.categoryname = ''), (categoryName = '')
+          "
         >
           Close
         </v-btn>
@@ -121,7 +146,7 @@
           class="inline-flex items-center px-5 py-2.5 mr-3 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800 mb-6"
           @click="createCategory()"
         >
-        {{dialogStatus == "Create" ? "Create " : "Update"}}
+          {{ dialogStatus == "Create" ? "Create " : "Update" }}
         </button>
       </v-card-actions>
     </v-card>
@@ -132,37 +157,32 @@ import axios from "axios";
 import useFormValidation from "../src/modules/useFormValidation";
 import { useToast } from "vue-toastification";
 import Swal from "sweetalert2";
+
+// Variables
 const categoryName = ref("");
 const dialog = ref(false);
 const searchCategory = ref("");
 const runtimeConfig = useRuntimeConfig();
-const categoryList = ref([])
-const dialogStatus = ref('')
-const id = ref(null)
+const categoryList = ref([]);
+const dialogStatus = ref("");
+const id = ref(null);
 const apiBaseUrl = runtimeConfig.public.API_BASE_URL;
-const itemsPerPage = 5;
-const toast = useToast();
-const headers = ref([
-  {
-    title: "Category",
-    align: "start",
-    sortable: false,
-    key: "name",
-  },
 
-  { title: "Actions", align: "center", key: "iron" },
-]);
+const toast = useToast();
+
 const { validateNameField, errors, validatePriceField } = useFormValidation();
 
-watch(searchCategory,async(nv)=>{
-    if(nv){
-        await getCategoryList()
-    }else{
-        await getCategoryList()
-    }
+// Watcher for search category
+watch(searchCategory, async (nv) => {
+  if (nv) {
+    await getCategoryList();
+  } else {
+    await getCategoryList();
+  }
+});
 
-})
-
+// Methods
+// create category
 async function createCategory() {
   dialog.value = true;
   validateInput("categoryname", categoryName.value);
@@ -170,98 +190,93 @@ async function createCategory() {
   if (Object.keys(errors).length >= 0 && errors.categoryname !== "") {
     return false;
   }
-if(dialogStatus.value == 'Create'){
- let data = await axios.post(`${apiBaseUrl}/api/category/create`,{
-    
-    name:categoryName.value
-  })
-   categoryName.value = ""
-    dialog.value =false
-  await getCategoryList()
-  toast.success(data.data.message)
-   
-}else{
-     let data = await axios.post(`${apiBaseUrl}/api/category/update`,{
-    name:categoryName.value,
-    id:id.value
-  })
-  dialog.value = false
-  categoryName.value = ""
-    toast.success(data.data.message)
-  await getCategoryList()
-}
- 
+  if (dialogStatus.value == "Create") {
+    let data = await axios.post(`${apiBaseUrl}/api/category/create`, {
+      name: categoryName.value,
+    });
+    categoryName.value = "";
+    dialog.value = false;
+    await getCategoryList();
+    toast.success(data.data.message);
+  } else {
+    let data = await axios.post(`${apiBaseUrl}/api/category/update`, {
+      name: categoryName.value,
+      id: id.value,
+    });
+    dialog.value = false;
+    categoryName.value = "";
+    toast.success(data.data.message);
+    await getCategoryList();
+  }
 }
 
-function editCategory(data){
-    dialog.value = true,dialogStatus.value='Edit',(id.value=data.id)
-    categoryName.value = data.name
+
+// Edit category
+function editCategory(data) {
+  (dialog.value = true), (dialogStatus.value = "Edit"), (id.value = data.id);
+  categoryName.value = data.name;
 }
-function deleteCategory(id){
- Swal.fire({
+
+//delete category
+function deleteCategory(id) {
+  Swal.fire({
     title: "Are you sure?",
     text: "You won't be able to revert this!",
     icon: "warning",
     showCancelButton: true,
 
- confirmButtonColor: "#1E4ED8",
+    confirmButtonColor: "#1E4ED8",
 
     confirmButtonText: "Yes, delete it!",
-  }).then(async(result) => {
-   try{
-     if (result.isConfirmed) {
-     
-      let data = await axios.post(`${apiBaseUrl}/api/category/delete`,{
-      id:id
-      })
-
-   await getCategoryList()
-      // Swal.fire({"Deleted!", "Your Product has been deleted.", "success"});
-      Swal.fire({
-        title: "Deleted!",
-        text: data.data.message,
-        confirmButtonColor: "#1E4ED8",
-        icon: "success",
-        
-      });
-    }
-   }catch(e){
-    console.log('e: ', e);
-      toast.error(e.response.data.message)
-   }
-  }).catch((e)=>{
-    console.log('e: ', e);
-    
   })
+    .then(async (result) => {
+      try {
+        if (result.isConfirmed) {
+          let data = await axios.post(`${apiBaseUrl}/api/category/delete`, {
+            id: id,
+          });
+
+          await getCategoryList();
+          // Swal.fire({"Deleted!", "Your Product has been deleted.", "success"});
+          Swal.fire({
+            title: "Deleted!",
+            text: data.data.message,
+            confirmButtonColor: "#1E4ED8",
+            icon: "success",
+          });
+        }
+      } catch (e) {
+        console.log("e: ", e);
+        toast.error(e.response.data.message);
+      }
+    })
+    .catch((e) => {
+      console.log("e: ", e);
+    });
 }
 
-
-// async function searchCategoryList(){
-//     if(searchCategory.value){
-
-    
-    
-    
-// }
 
 
 // Input Validation method
 const validateInput = (fieldname, value) => {
   validateNameField(fieldname, value);
 };
-const getCategoryList = async() => {
-let data =await axios.post(`${apiBaseUrl}/api/category/list`,{
-    search:searchCategory.value
-})
-let categoryData = data.data.data
-console.log('categoryData: ', categoryData);
-categoryList.value = categoryData.categories
-console.log('categoryList.value: ', categoryList.value);
 
+// getCategoryList
+const getCategoryList = async () => {
+  let data = await axios.post(`${apiBaseUrl}/api/category/list`, {
+    search: searchCategory.value,
+  });
+  let categoryData = data.data.data;
+  console.log("categoryData: ", categoryData);
+  categoryList.value = categoryData.categories;
+  console.log("categoryList.value: ", categoryList.value);
 };
-onMounted(async() => {
+
+// Mounted
+onMounted(async () => {
   errors.categoryname = "";
-  await getCategoryList()
+  await getCategoryList();
 });
 </script>
 <style >
