@@ -19,6 +19,12 @@ axios: {
 build:{
   // vue-toastification - old commonjs module 
   transpile: ['vue-toastification'],
-}
+},
+runtimeConfig: {
+  public: {
+    API_BASE_URL: process.env.API_BASE_URL,
+
+  },
+},
 
 })

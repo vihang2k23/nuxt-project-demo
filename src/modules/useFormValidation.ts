@@ -11,7 +11,7 @@ export default function useFormValidation() {
     const { isEmpty, minLength, isEmail, isNum } = useValidators();
 
     const validateNameField = (fieldName, fieldValue) => {
-        errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : minLength(fieldName, fieldValue, 4)
+        errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : minLength(fieldName, fieldValue, 1)
     }
 
     const validateEmailField = (fieldName, fieldValue) => {

@@ -139,9 +139,12 @@ import Swal from "sweetalert2";
 const productData = ref([]);
 const category = ref("");
 const route = useRouter();
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.API_BASE_URL
 
 // Mounted
 onMounted(async () => {
+
   await getProductData();
 });
 
@@ -160,7 +163,7 @@ const filterCategory = async()=> {
   console.log("hello", category.value);
   if (category.value) {
     let data = await axios.get(
-      `https://fakestoreapi.com/products/category/${category.value}`
+      `${apiBaseUrl}/products/category/${category.value}`
     );
     productData.value = data.data;
   } else {
@@ -169,7 +172,7 @@ const filterCategory = async()=> {
 }
 //get list of Product 
 const  getProductData = async() => {
-  let data = await axios.get("https://fakestoreapi.com/products");
+  let data = await axios.get(`${apiBaseUrl}/products`);
   productData.value = data.data;
 }
 

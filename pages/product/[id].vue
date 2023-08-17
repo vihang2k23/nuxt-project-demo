@@ -140,7 +140,8 @@ const router = useRouter();
 const toast = useToast();
 const productData = ref([]);
 const { validateNameField, errors, validatePriceField } = useFormValidation();
-
+const runtimeConfig = useRuntimeConfig();
+const apiBaseUrl = runtimeConfig.public.API_BASE_URL
 // Mounted
 onMounted(async () => {
   resetValidation();
@@ -154,7 +155,7 @@ onMounted(async () => {
 // Get Single Product
 const getSingleProduct = async () => {
   let data = await axios.get(
-    `https://fakestoreapi.com/products/${route.params.id}`
+    `${apiBaseUrl}/products/${route.params.id}`
   );
 
   productData.value = data.data;
@@ -190,7 +191,7 @@ const createProduct = async () => {
 
   if (route.params.id == "create") {
     try {
-      let data = await axios.post("https://fakestoreapi.com/products", {
+      let data = await axios.post(`${apiBaseUrl}/products`, {
         payload,
       });
 
@@ -206,7 +207,7 @@ const createProduct = async () => {
   } else {
     try {
       let data = await axios.put(
-        `https://fakestoreapi.com/products/${route.params.id}`,
+        `${apiBaseUrl}/products/${route.params.id}`,
         {
           payload,
         }
