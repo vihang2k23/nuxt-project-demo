@@ -2,8 +2,14 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['nuxt-icons',"nuxt-rating"  ],
+  script: [
+    {
+      src: 'bootstrap/dist/js/bootstrap.bundle.min.js'
+    }
+  ],
 
-  css: ['~/assets/css/tailwind.css'],
+  css: ["bootstrap/dist/css/bootstrap.min.css",'~/assets/css/tailwind.css','vuetify/lib/styles/main.sass'],
+  
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -18,7 +24,7 @@ axios: {
 },
 build:{
   // vue-toastification - old commonjs module 
-  transpile: ['vue-toastification'],
+  transpile: ['vue-toastification','vuetify'],
 },
 runtimeConfig: {
   public: {

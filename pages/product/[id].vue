@@ -56,27 +56,27 @@
               </span>
             </div>
             <div>
-              <label
-                for="category"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Category</label
-              >
-              <select
-                id="category"
-                v-model="category"
-                @keyup="validateInput('category', category)"
-                @blur="validateInput('category', category)"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-              >
-                <option value="">Select category</option>
-                <option value="electronics">Electronics</option>
-                <option value="jewelery">Jewelery</option>
-                <option value="men's clothing">Men's clothing</option>
-                <option value="women's clothing">Women's clothing</option>
-              </select>
-              <span class="text-red-600" v-if="errors.category">
-                {{ errors.category }}
-              </span>
+                <label
+                  for="category"
+                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Category</label
+                >
+                <select
+                  id="category"
+                  v-model="category"
+                  @keyup="validateInput('category', category)"
+                  @blur="validateInput('category', category)"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
+                >
+                  <option value="">Select category</option>
+                  <option value="electronics">Electronics</option>
+                  <option value="jewelery">Jewelery</option>
+                  <option value="men's clothing">Men's clothing</option>
+                  <option value="women's clothing">Women's clothing</option>
+                </select>
+                <span class="text-red-600" v-if="errors.category">
+                  {{ errors.category }}
+                </span>
             </div>
 
             <div class="sm:col-span-2">
@@ -140,6 +140,7 @@ const router = useRouter();
 const toast = useToast();
 const productData = ref([]);
 const { validateNameField, errors, validatePriceField } = useFormValidation();
+
 const runtimeConfig = useRuntimeConfig();
 const apiBaseUrl = runtimeConfig.public.API_BASE_URL
 // Mounted

@@ -83,4 +83,11 @@
                 .swal2-popup .swal2-modal .swal2-icon-warning .swal2-show{
                     background-color: #FFFFFF !important;
                 }
+                .icon {
+                    padding-left: 25px;
+                    background: url("https://static.thenounproject.com/png/101791-200.png")
+                      no-repeat right;
+                    background-position: 95%;
+                    background-size: 20px;
+                  }
   }
