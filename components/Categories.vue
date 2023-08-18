@@ -83,16 +83,12 @@
         <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
       </div>
       <!-- Pagination design -->
-      <div class="center mt-3">
+      <div class=" mt-3 padding-right">
         <div class="pagination">
-          <a href="#">&laquo;</a>
+          <a href="#" class="disable">&laquo;</a>
           <a href="#" class="active">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-          <a href="#">6</a>
-          <a href="#">&raquo;</a>
+          
+          <a href="#" class="disable">&raquo;</a>
         </div>
       </div>
     </div>

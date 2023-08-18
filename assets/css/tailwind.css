@@ -120,5 +120,12 @@
                 
                 .pagination a:hover:not(.active) {
                     background-color: #DDD;
-                }   
+                }  
+                .disable{
+                    background-color: #DDD;
+                    cursor: not-allowed!important;
+                } 
+                .padding-right{
+                    margin-left: 1190px;
+                }
   }
