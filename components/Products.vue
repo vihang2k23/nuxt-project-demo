@@ -126,7 +126,11 @@
           </tr>
         </tbody>
       </table>
-      <!-- Pagination  -->
+     
+      <div v-if="!productData.length">
+        <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
+      </div>
+       <!-- Pagination  -->
       <div class="center mt-3 text-right">
         <div class="pagination">
           <a href="#">&laquo;</a>
@@ -139,14 +143,11 @@
           <a href="#">&raquo;</a>
         </div>
       </div>
-      <div v-if="!productData.length">
-        <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
-      </div>
     </div>
     <!-- Modal for edit and create Product  -->
     <v-dialog v-model="dialog" persistent width="1024">
       <v-card>
-        <v-card-title class="text-center mt-3">
+        <v-card-title class="text-center mt-5">
           <span class="text-h3">{{
             dialogKey == "Create" ? "Create Product" : "Update Product"
           }}</span>
@@ -166,7 +167,7 @@
                   name="name"
                   id="name"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Type product name"
+                  placeholder="Enter product name"
                   @keyup="validateInput('productTitle', productTitle)"
                   @blur="validateInput('productTitle', productTitle)"
                 />
@@ -263,7 +264,7 @@
 </template>
 
 
-<script setup lang="ts">
+<script setup >
 import axios from "axios";
 import Swal from "sweetalert2";
 import useFormValidation from "../src/modules/useFormValidation";
@@ -277,7 +278,7 @@ const route = useRouter();
 const searchProduct = ref("");
 const toast = useToast();
 const dialog = ref(false);
-const productTitle = ref("");
+const productTitle = ref();
 const category = ref("");
 const description = ref("");
 const price = ref(null);
@@ -367,7 +368,7 @@ function deleteProduct(id) {
 }
 
 // Input Validation method
-const validateInput = (fieldname: any, value) => {
+const validateInput = (fieldname, value) => {
   validateNameField(fieldname, value);
 };
 
@@ -398,7 +399,7 @@ const createProduct = async () => {
       emptyfield();
       await getProductData();
     } catch (e) {
-      toast.error("errrorr", e);
+      toast.error("errrorr", e.response.data.message);
       error.value = true;
     }
   } else {
@@ -422,8 +423,8 @@ const createProduct = async () => {
       toast.success(data.data.message);
       await getProductData();
     } catch (e) {
-      //
-      toast.error("errrorr", e);
+    
+       toast.error("errrorr", e.response.data.message);
       error.value = true;
     }
   }
@@ -465,7 +466,7 @@ function editProduct(data) {
 
 // EmptyFiled
 function emptyfield() {
-  (productTitle.value = " "), (category.value = "");
+  (productTitle.value = ""), (category.value = "");
   description.value = "";
   price.value = null;
 }

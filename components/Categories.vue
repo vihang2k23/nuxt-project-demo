@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="mt-3">
-       <!-- Title  -->
+      <!-- Title  -->
       <span class="text-secendory text-4xl ml-3"> Categories</span>
     </div>
     <!-- Filter of category  -->
@@ -17,7 +17,6 @@
           placeholder="Search Category"
         />
       </div>
-   
 
       <!-- create user button  -->
       <div class="grid-cols-end flex justify-end">
@@ -79,6 +78,10 @@
           </tr>
         </tbody>
       </table>
+
+      <div v-if="!categoryList.length">
+        <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
+      </div>
       <!-- Pagination design -->
       <div class="center mt-3">
         <div class="pagination">
@@ -92,17 +95,13 @@
           <a href="#">&raquo;</a>
         </div>
       </div>
-      <div v-if="!categoryList.length">
-        <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
-      </div>
     </div>
   </section>
 
-
-<!-- Modal for edit and create category  -->
+  <!-- Modal for edit and create category  -->
   <v-dialog v-model="dialog" persistent width="512">
     <v-card>
-      <v-card-title class="text-center mt-3">
+      <v-card-title class="text-center mt-5">
         <span class="text-h5 text-center">{{
           dialogStatus == "Create" ? "Create Category" : "Update Category"
         }}</span>
@@ -152,7 +151,7 @@
     </v-card>
   </v-dialog>
 </template>
-<script setup>
+<script setup >
 import axios from "axios";
 import useFormValidation from "../src/modules/useFormValidation";
 import { useToast } from "vue-toastification";
@@ -191,25 +190,32 @@ async function createCategory() {
     return false;
   }
   if (dialogStatus.value == "Create") {
-    let data = await axios.post(`${apiBaseUrl}/api/category/create`, {
-      name: categoryName.value,
-    });
-    categoryName.value = "";
-    dialog.value = false;
-    await getCategoryList();
-    toast.success(data.data.message);
+    try {
+      let data = await axios.post(`${apiBaseUrl}/api/category/create`, {
+        name: categoryName.value,
+      });
+      categoryName.value = "";
+      dialog.value = false;
+      await getCategoryList();
+      toast.success(data.data.message);
+    } catch (e) {
+      toast.error(e.response.data.message);
+    }
   } else {
-    let data = await axios.post(`${apiBaseUrl}/api/category/update`, {
-      name: categoryName.value,
-      id: id.value,
-    });
-    dialog.value = false;
-    categoryName.value = "";
-    toast.success(data.data.message);
-    await getCategoryList();
+    try {
+      let data = await axios.post(`${apiBaseUrl}/api/category/update`, {
+        name: categoryName.value,
+        id: id.value,
+      });
+      dialog.value = false;
+      categoryName.value = "";
+      toast.success(data.data.message);
+      await getCategoryList();
+    } catch (e) {
+      toast.error(e.response.data.message);
+    }
   }
 }
-
 
 // Edit category
 function editCategory(data) {
@@ -254,8 +260,6 @@ function deleteCategory(id) {
       console.log("e: ", e);
     });
 }
-
-
 
 // Input Validation method
 const validateInput = (fieldname, value) => {

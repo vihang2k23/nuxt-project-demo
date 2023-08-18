@@ -8,7 +8,6 @@
             @click="emit('emitValue', 'Category')"
             >E-commerce</a
           >
-        
         </div>
         <div>
           <v-btn
@@ -25,12 +24,11 @@
           >
             Product
           </v-btn>
-         
         </div>
       </div>
     </div>
   </nav>
 </template>
-<script setup>
+<script setup lang="ts">
 const emit = defineEmits(["emitValue"]);
 </script>
