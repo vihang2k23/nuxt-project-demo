@@ -1,22 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  modules: ['nuxt-icons',"nuxt-rating"  ],
-  script: [
+devtools: { enabled: true },
+modules: ['nuxt-icons',"nuxt-rating" ,    'nuxt-mapbox' ],
+mapbox: {
+  accessToken: 'pk.eyJ1IjoidmloYW5ncCIsImEiOiJjbGl4MGx4YXQwM2d3M3FxZXdkcWExMnhpIn0.q-nh1qUn2qvaKe630T2w2g'
+},
+script: [
     {
       src: 'bootstrap/dist/js/bootstrap.bundle.min.js'
     }
   ],
-
   css: ["bootstrap/dist/css/bootstrap.min.css",'~/assets/css/tailwind.css','vuetify/lib/styles/main.sass'],
-  
-  postcss: {
+postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
-  buildModules: [
+buildModules: [
     "@nuxtjs/axios"
 ],
 axios: {

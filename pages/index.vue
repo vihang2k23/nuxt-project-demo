@@ -11,16 +11,16 @@
 <script setup lang="ts">
 import axios from "axios";
 import Swal from "sweetalert2";
+
 // variables
 const productData = ref([]);
 const category = ref("");
 const route = useRouter();
-const productKey = ref(false);
-const categoryKey = ref(true);
+const productKey = ref(true);
+const categoryKey = ref(false);
 
 // Methods
 function listingKey(data:any) {
-  console.log(data, "emit");
   if (data == "Product") {
     productKey.value = true;
     categoryKey.value = false;

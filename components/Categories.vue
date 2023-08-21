@@ -82,7 +82,7 @@
       <div v-if="!categoryList.length">
         <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
       </div>
-      <!-- Pagination design -->
+      <!-- Pagination design, static as now -->
       <div class=" mt-3 padding-right">
         <div class="pagination">
           <a href="#" class="disable">&laquo;</a>
@@ -181,34 +181,38 @@ watch(searchCategory, async (nv) => {
 async function createCategory() {
   dialog.value = true;
   validateInput("categoryname", categoryName.value);
-  console.log(errors);
+  
   if (Object.keys(errors).length >= 0 && errors.categoryname !== "") {
     return false;
   }
   if (dialogStatus.value == "Create") {
     try {
-      let data = await axios.post(`${apiBaseUrl}/api/category/create`, {
-        name: categoryName.value,
+      let data = await useFetch(`${apiBaseUrl}/api/category/create`, {
+        method:"post",
+       body:{ name: categoryName.value,}
       });
       categoryName.value = "";
       dialog.value = false;
       await getCategoryList();
-      toast.success(data.data.message);
+      toast.success(data.data.value.message);
     } catch (e) {
-      toast.error(e.response.data.message);
+      toast.error(e.response.data.value.message);
     }
   } else {
     try {
-      let data = await axios.post(`${apiBaseUrl}/api/category/update`, {
+      let data = await useFetch(`${apiBaseUrl}/api/category/update`,{
+        method:'post',
+        body:{
         name: categoryName.value,
         id: id.value,
-      });
+      },
+      } );
       dialog.value = false;
       categoryName.value = "";
-      toast.success(data.data.message);
+      toast.success(data.data.value.message);
       await getCategoryList();
     } catch (e) {
-      toast.error(e.response.data.message);
+      toast.error(e.response.data.value.message);
     }
   }
 }
@@ -248,12 +252,12 @@ function deleteCategory(id) {
           });
         }
       } catch (e) {
-        console.log("e: ", e);
+        
         toast.error(e.response.data.message);
       }
     })
     .catch((e) => {
-      console.log("e: ", e);
+      
     });
 }
 
@@ -263,15 +267,22 @@ const validateInput = (fieldname, value) => {
 };
 
 // getCategoryList
-const getCategoryList = async () => {
-  let data = await axios.post(`${apiBaseUrl}/api/category/list`, {
-    search: searchCategory.value,
-  });
-  let categoryData = data.data.data;
-  console.log("categoryData: ", categoryData);
-  categoryList.value = categoryData.categories;
-  console.log("categoryList.value: ", categoryList.value);
-};
+// const getCategoryList = async () => {
+//   let {data,pending,error,status} = await useFetch(`${apiBaseUrl}/api/category/list`, {
+   
+//     method:"post",
+//     body:{
+//     search: searchCategory.value,
+//   }
+//   });
+  
+//   let categoryData = data.value?.data;
+//   console.log('data.data: ',categoryData );
+  
+//   categoryList.value = categoryData?.categories;
+//   console.log('categoryList.value: ', categoryList.value);
+  
+// };
 
 // Mounted
 onMounted(async () => {

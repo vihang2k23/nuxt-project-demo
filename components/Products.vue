@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="mt-3">
-     <!-- Title  -->
+      <!-- Title  -->
       <span class="text-secendory text-4xl ml-6"> Products</span>
     </div>
     <div class="grid grid-cols-3 mt-5 gap-4">
@@ -19,7 +19,7 @@
           />
         </div>
       </div>
-      
+
       <div class="justify-center flex">
         <div class="">
           <select
@@ -40,7 +40,6 @@
           </select>
         </div>
       </div>
-     
 
       <!-- create user button  -->
       <div class="grid-cols-end flex justify-end">
@@ -126,17 +125,16 @@
           </tr>
         </tbody>
       </table>
-     
+
       <div v-if="!productData.length">
         <h2 class="text-center text-2xl mt-5">Data Not Available</h2>
       </div>
-       <!-- Pagination  -->
+      <!-- Pagination ,static as now -->
       <div class="center mt-3 text-right">
         <div class="pagination">
           <a href="#" class="disable">&laquo;</a>
           <a href="#" class="active">1</a>
-         
-          
+
           <a href="#" class="disable">&raquo;</a>
         </div>
       </div>
@@ -304,13 +302,15 @@ watch(searchProduct, async (nv) => {
 
 //Filter Category
 const filterCategory = async () => {
-  console.log("hello", categoryFilter.value);
   if (categoryFilter.value) {
-    let data = await axios.post(`${apiBaseUrl}/api/product/list`, {
-      search: searchProduct.value,
-      category_id: categoryFilter.value,
+    let data = await useFetch(`${apiBaseUrl}/api/product/list`, {
+      method: "post",
+      body: {
+        search: searchProduct.value,
+        category_id: categoryFilter.value,
+      },
     });
-    let product = data.data.data;
+    let product = data.data.value.data;
     productData.value = product.products;
   } else {
     await getProductData();
@@ -318,12 +318,14 @@ const filterCategory = async () => {
 };
 //get list of Product
 const getProductData = async () => {
-  let data = await axios.post(`${apiBaseUrl}/api/product/list`, {
-    search: searchProduct.value,
+  let data = await useFetch(`${apiBaseUrl}/api/product/list`, {
+    method: "post",
+    body: { search: searchProduct.value },
   });
-  let product = data.data.data;
+  console.log("data: ", data);
+  let product = data.data.value.data;
+  console.log("data: ", data);
   productData.value = product.products;
-  console.log(" productData.value: ", productData.value);
 };
 
 //delete Product
@@ -355,13 +357,10 @@ function deleteProduct(id) {
           });
         }
       } catch (e) {
-        console.log("e: ", e);
         toast.error(e.response.data.message);
       }
     })
-    .catch((e) => {
-      console.log("e: ", e);
-    });
+    .catch((e) => {});
 }
 
 // Input Validation method
@@ -389,14 +388,18 @@ const createProduct = async () => {
 
   if (dialogKey.value == "Create") {
     try {
-      let data = await axios.post(`${apiBaseUrl}/api/product/create`, payload);
+      let {data,error} = await useFetch(`${apiBaseUrl}/api/product/create`, {
+        method:"post",
+        body:{payload}
+      });
+   
       dialog.value = false;
       resetValidation();
-      toast.success(data.data.message);
+      toast.success(data.data.value.message);
       emptyfield();
       await getProductData();
     } catch (e) {
-      toast.error("errrorr", e.response.data.message);
+      toast.error( e.response.data.value.message);
       error.value = true;
     }
   } else {
@@ -408,20 +411,18 @@ const createProduct = async () => {
         category_id: category.value,
         id: id.value,
       };
-      let data = await axios.post(
-        `${apiBaseUrl}/api/product/update`,
-        payloadData
-      );
+     let data = await useFetch(`${apiBaseUrl}/api/product/update`, {
+        method:"post",
+        body:payloadData
+      });
       resetValidation();
-      console.log(data);
 
       dialog.value = false;
       emptyfield();
-      toast.success(data.data.message);
+      toast.success(data.data.value.message);
       await getProductData();
     } catch (e) {
-    
-       toast.error("errrorr", e.response.data.message);
+      toast.error("errrorr", e.response.data.message);
       error.value = true;
     }
   }
@@ -442,17 +443,18 @@ const resetValidation = () => {
 
 // Get Categorylist
 const getCategoryList = async () => {
-  let data = await axios.post(`${apiBaseUrl}/api/category/list`, {});
-  let categoryData = data.data.data;
+  let data = await useFetch(`${apiBaseUrl}/api/category/list`, {
+    method: "post",
+  });
+  
+  let categoryData = data.data.value?.data;
   console.log("categoryData: ", categoryData);
-  categoryList.value = categoryData.categories;
-  console.log("categoryList.value: ", categoryList.value);
+
+  categoryList.value = categoryData?.categories;
 };
 
-
-// Edit Product 
+// Edit Product
 function editProduct(data) {
-  console.log("data: ", data);
   (dialog.value = true), (dialogKey.value = "Edit"), (id.value = data.id);
   productTitle.value = data.title;
   price.value = data.price;
